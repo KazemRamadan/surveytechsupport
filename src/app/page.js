@@ -4,7 +4,7 @@ import "survey-core/defaultV2.min.css";
 import { ContrastDarkPanelless } from "survey-core/themes";
 import { Model } from "survey-core";
 import { Survey } from "survey-react-ui";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 const surveyJson = {
   completedHtml: "<h3>Thank you for your feedback</h3>",
@@ -202,12 +202,17 @@ export default function App() {
 
   const StarBackground = () => {
     const canvasRef = useRef(null);
-    const stars = Array.from({ length: 500 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      radius: Math.random() * 1.5,
-      speed: Math.random() * 0.5 + 0.1,
-    }));
+    const [stars, setStars] = useState([]);
+
+    useEffect(() => {
+      const newStars = Array.from({ length: 500 }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        radius: Math.random() * 1.5,
+        speed: Math.random() * 0.5 + 0.1,
+      }));
+      setStars(newStars);
+    }, []);
 
     const drawStars = (ctx) => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -250,7 +255,7 @@ export default function App() {
       return () => {
         window.removeEventListener("resize", resizeCanvas);
       };
-    }, []);
+    }, [stars]);
 
     return <canvas ref={canvasRef} className="fixed inset-0 z-0" />;
   };
