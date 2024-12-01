@@ -1,9 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-export async function GET() {
-    return Response.json({ message: 'Hello World' })
-  }
-
 let isConnected = false
 
 const connectToDB = async () => {
@@ -40,6 +36,34 @@ const surveySchema = new Schema(
 
 const SurveyForm =
     mongoose.models?.SurveyForm || mongoose.model("SurveyForm", surveySchema);
+
+
+async function getSurveys() {
+    try {
+        await connectToDB();
+        console.log("connected");
+        const surveys = await SurveyForm.find({
+          }
+          , {
+            _id: 0,
+            __v: 0,
+          });
+        console.log(surveys);
+        return surveys;
+      } catch (error) {
+        console.log("Error while getting posts: " + error);
+        throw error;
+      }
+    }
+
+export async function GET() {
+    try {
+        const surveys = await getSurveys();
+        return new Response(JSON.stringify(surveys), { status: 200 });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: "Internal Error", error1: error }), { status: 500 });
+    }
+}
 
 
 async function createSurvey(onboardingRating, valuablePart, improvementSuggestions, confidenceLevel, clearUnderstanding, unclearTopics, engagementLevel, materialsHelpful, opportunityForQuestions, futureTopics, preparedForOnCall) {
