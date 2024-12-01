@@ -42,7 +42,7 @@ const SurveyForm =
     mongoose.models?.SurveyForm || mongoose.model("SurveyForm", surveySchema);
 
 
-export async function createSurvey(onboardingRating, valuablePart, improvementSuggestions, confidenceLevel, clearUnderstanding, unclearTopics, engagementLevel, materialsHelpful, opportunityForQuestions, futureTopics, preparedForOnCall) {
+async function createSurvey(onboardingRating, valuablePart, improvementSuggestions, confidenceLevel, clearUnderstanding, unclearTopics, engagementLevel, materialsHelpful, opportunityForQuestions, futureTopics, preparedForOnCall) {
     await connectToDB();
 
     const survey = new SurveyForm({
